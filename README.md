@@ -31,7 +31,7 @@ $ bash BhuShanPhisherTool.sh
 
 ### Run this tool on Docker:
 ```
-$ docker pull htrtech/**bhushanphishertool**
+$ docker pull htrtech/**BhuShanPhisherTool**
 $ docker run --rm -it htrtech/BhuShanPhisherTool
 ```
 

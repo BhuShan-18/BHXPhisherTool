@@ -18,21 +18,21 @@
 
 - Just, Clone this repository -
 ```
-$ git clone git://github.com/htr-tech/bhushanphishertool.git
+$ git clone git:https://github.com/BhuShan-18/BHXPhisherTool
 ```
 
-- Change to cloned directory and run `bhushanphishertool.sh` -
+- Change to cloned directory and run `BhuShanPhisherTool.sh` -
 ```
-$ cd bhushanphishertool
-$ bash bhushanphishertool.sh
+$ cd BhuShanPhisherTool
+$ bash BhuShanPhisherTool.sh
 ```
 
 - On first launch, It'll install the dependencies and that's it. `BhuShanPhisherTool` is installed.
 
 ### Run this tool on Docker:
 ```
-$ docker pull htrtech/bhushanphishertool
-$ docker run --rm -it htrtech/bhushanphishertool
+$ docker pull htrtech/**bhushanphishertool**
+$ docker run --rm -it htrtech/BhuShanPhisherTool
 ```
 
 ### Dependencies
@@ -51,5 +51,5 @@ $ docker run --rm -it htrtech/bhushanphishertool
 
 ### Find Me on :
 <p align="left">
-  <a href="https://www.instagram.com/tahmid.rayat" target="_blank"><img src="https://img.shields.io/badge/IG-%40tahmid.rayat-red?style=for-the-badge&logo=instagram"></a>
+  <a href="https://www.instagram.com/bhushan_as_cool_as_always" target="_blank"><img src="https://img.shields.io/badge/IG-%40tahmid.rayat-red?style=for-the-badge&logo=instagram"></a>
 </p>

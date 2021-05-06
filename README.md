@@ -51,5 +51,5 @@ $ docker run --rm -it htrtech/BhuShanPhisherTool
 
 ### Find Me on :
 <p align="left">
-  <a href="https://www.instagram.com/bhushan_as_cool_as_always" target="_blank"><img src="https://img.shields.io/badge/IG-%40BhuShan-red?style=for-the-badge&logo=instagram"></a>
+  <a href="https://www.instagram.com/bhushan_as_cool_as_always" target="_blank"><img src="https://img.shields.io/badge/IG-%bhushan_as_cool_as_always-red?style=for-the-badge&logo=instagram"></a>
 </p>

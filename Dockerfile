@@ -1,8 +1,8 @@
 FROM BhuShan Hacks Official
-LABEL MAINTAINER="https://github.com/htr-tech/bhushanphishertool"
+LABEL MAINTAINER="https://github.com/BhuShan-18/BHXPhisherTool"
 
-WORKDIR bhushanphishertool/
-ADD . /bhushanphishertool
+WORKDIR BHXPhisherTool/
+ADD . /BHXPhisherTool
 
 RUN apt-get update
 RUN apt-get install -y curl
@@ -11,4 +11,4 @@ RUN apt-get install -y unzip
 RUN apt-get clean
 RUN apt-get install -y wget
 
-CMD ["./bhushanphishertool.sh"]
+CMD ["./BHXPhisherTool.sh"]

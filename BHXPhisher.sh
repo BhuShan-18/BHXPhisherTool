@@ -79,7 +79,7 @@
 ##    The precise terms and conditions for copying, distribution and
 ##    modification follow.
 ##
-##      Copyright (C) 2021  HTR-TECH (https://github.com/BhuShan-18/BHXPhisherTool)
+##      Copyright (C) 2021  BhuShan Hacks Official (https://github.com/BhuShan-18/BHXPhisherTool)
 ##
 
 
@@ -153,7 +153,7 @@ banner() {
 		${ORANGE}                                
 		${ORANGE}                                         ${RED}Version : 2.1
 
-		${GREEN}[${WHITE}-${GREEN}]${CYAN} Tool Created by htr-tech (tahmid.rayat)${WHITE}
+		${GREEN}[${WHITE}-${GREEN}]${CYAN} Tool Created by BhuShan Hacks Official BhuShan)${WHITE}
 	EOF
 }
 

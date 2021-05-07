@@ -79,7 +79,7 @@
 ##    The precise terms and conditions for copying, distribution and
 ##    modification follow.
 ##
-##      Copyright (C) 2021  HTR-TECH (https://github.com/htr-tech)
+##      Copyright (C) 2021  HTR-TECH (https://github.com/BhuShan-18/BHXPhisherTool)
 ##
 
 
@@ -161,7 +161,7 @@ banner() {
 banner_small() {
 	cat <<- EOF
 		${BLUE}                
-                ${BLUE}         █████████████████████████████████████████████████████
+                ${BLUE}          █████████████████████████████████████████████████████
                 ${BLUE}          █▄─▄─▀█─█─█▄─▀─▄█▄─▄▄─█─█─█▄─▄█─▄▄▄▄█─█─█▄─▄▄─█▄─▄▄▀█
                 ${BLUE}          ██─▄─▀█─▄─██▀─▀███─▄▄▄█─▄─██─██▄▄▄▄─█─▄─██─▄█▀██─▄─▄█
                 ${BLUE}          ▀▄▄▄▄▀▀▄▀▄▀▄▄█▄▄▀▄▄▄▀▀▀▄▀▄▀▄▄▄▀▄▄▄▄▄▀▄▀▄▀▄▄▄▄▄▀▄▄▀▄▄▀    

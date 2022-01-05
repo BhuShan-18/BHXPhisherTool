@@ -47,29 +47,8 @@ $ docker run --rm -it BhuShan-18/BhuShanPhisherTool
 
 > Supported Platform : **`Termux`**, **`Ubuntu/Debian/Kali`**, **`Arch Linux/Manjaro`**, **`Fedora`**
 
-##
 
-### Special Thanks To:
 
-### ME
-<p align="left">
-  <a href="https://www.instagram.com/16oct.01" target="_blank"></a>
-</p>
-### Abhishek Undge
-<p align="left">
-  <a href="https://www.instagram.com/abhishek.undge" target="_blank"></a>
-</p>
-### Kishor Masulkar
-<p align="left">
-  <a href="https://www.instagram.com/kishor_masulkar45" target="_blank"></a>
-</p>
-### Bhushan Pawar 
-<p align="left">
-  <a href="https://www.instagram.com/bhushan_deshmukh45" target="_blank"></a>
-</p>
 
-### JOIN OUR OFFICIAL CHANNEL
-<p align="left">
-  <a href="t.me/takemetothelink" target="_blank"></a>
-</p>
+
 

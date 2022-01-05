@@ -32,7 +32,7 @@ $ bash BhuShanPhisherTool.sh
 ### Run this tool on Docker:
 ```
 $ docker pull htrtech/**BhuShanPhisherTool**
-$ docker run --rm -it htrtech/BhuShanPhisherTool
+$ docker run --rm -it BhuShan-18/BhuShanPhisherTool
 ```
 
 ### Dependencies
@@ -49,7 +49,27 @@ $ docker run --rm -it htrtech/BhuShanPhisherTool
 
 ##
 
-### Find Me on :
+### Special Thanks To:
+
+### ME
 <p align="left">
-  <a href="https://www.instagram.com/bhushan_as_cool_as_always" target="_blank"><img src="https://img.shields.io/badge/IG-%bhushan-red?style=for-the-badge&logo=instagram"></a>
+  <a href="https://www.instagram.com/16oct.01" target="_blank"></a>
 </p>
+### Abhishek Undge
+<p align="left">
+  <a href="https://www.instagram.com/abhishek.undge" target="_blank"></a>
+</p>
+### Kishor Masulkar
+<p align="left">
+  <a href="https://www.instagram.com/kishor_masulkar45" target="_blank"></a>
+</p>
+### Bhushan Pawar 
+<p align="left">
+  <a href="https://www.instagram.com/bhushan_deshmukh45" target="_blank"></a>
+</p>
+
+### JOIN OUR OFFICIAL CHANNEL
+<p align="left">
+  <a href="t.me/takemetothelink" target="_blank"></a>
+</p>
+

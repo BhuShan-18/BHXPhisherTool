@@ -5,6 +5,12 @@
 ##   Version 	: 	2.1
 ##   Github 	: 	https://github.com/BhuShan-18/BHXPhisherTool
 
+##   THANKS TO :
+##   Me -https://www.instagram.com/16oct.01/
+##   Abhishek Undge - https://instagram.com/abhishek.undge/
+##   Kishor Masulkar -https://www.instagram.com/kishor_masulkar45/
+##   Bhushan Deshmukh -https://www.instagram.com/bhushan_deshmukh45/
+
 ## If you Copy Then Give the credits :)
 
 

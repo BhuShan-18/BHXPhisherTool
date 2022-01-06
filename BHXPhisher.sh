@@ -166,7 +166,7 @@ banner() {
 		${ORANGE}   
 		${ORANGE}  
 		${ORANGE}                                
-		${ORANGE}                                         ${RED}Version : 2.1
+		${ORANGE}                                         ${BLUE}Version : 3.0
 
 		${GREEN}[${WHITE}-${GREEN}]${CYAN} Tool Created by BhuShan Hacks Official BhuShan)${WHITE}
 	EOF
@@ -184,7 +184,7 @@ banner_small() {
                 ${BLUE} 
                 ${BLUE} 
 		${BLUE}                
-		${BLUE}                                                                             ${WHITE} 2.1
+		${BLUE}                                                                             ${WHITE} 3.0
 	EOF
 }
 
@@ -315,13 +315,13 @@ msg_exit() {
 about() {
 	{ clear; banner; echo; }
 	cat <<- EOF
-		${GREEN}Author   ${RED}:  ${ORANGE}TAHMID RAYAT ${RED}[ ${ORANGE}HTR-TECH ${RED}]
-		${GREEN}Github   ${RED}:  ${CYAN}https://github.com/htr-tech
-		${GREEN}Social   ${RED}:  ${CYAN}https://linktr.ee/tahmid.rayat
-		${GREEN}Version  ${RED}:  ${ORANGE}2.2
+		${GREEN}Author   ${RED}:  ${ORANGE}User00.dat ${RED}[ ${ORANGE}Bhushan Hacks Official ${RED}]
+		${GREEN}Github   ${RED}:  ${CYAN}https://github.com/BhuShan-18
+		${GREEN}Social   ${RED}:  ${CYAN}https://instagram.com/16oct.01/
+		${GREEN}Version  ${RED}:  ${ORANGE}3.0
 
-		${REDBG}${WHITE} Thanks : Adi1090x,MoisesTapia,ThelinuxChoice
-								  DarkSecDevelopers,Mustakim Ahmed,1RaY-1 ${RESETBG}
+		${REDBG}${WHITE} Thanks : Kishor Masulkar, Bhushan Pawar, Vedant Patil, Abhishek Undge  
+								  BhuShan Hacks Official ${RESETBG}
 
 		${RED}Warning:${WHITE}
 		${CYAN}This Tool is made for educational purpose only ${RED}!${WHITE}
